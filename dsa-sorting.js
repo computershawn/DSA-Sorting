@@ -2,6 +2,9 @@
 // Sorting Algorithms Yay!
 /******************************/
 
+const LinkedList = require('./linkedlist')
+
+
 // LET'S MAKE A TIMER!
 let startTime, endTime;
 
@@ -80,7 +83,8 @@ function merge(left, right, array) {
     array[outputIndex++] = right[i];
   }
   return array;
-};
+}
+
 function mergeSort(array) {
   if (array.length <= 1) {
     return array;
@@ -97,7 +101,7 @@ function mergeSort(array) {
   left = mergeSort(left);
   right = mergeSort(right);
   return merge(left, right, array);
-};
+}
 
 
 /******************************/
@@ -132,6 +136,90 @@ function quickSort(array, start = 0, end = array.length) {
   return array;
 };
 
+const splitLinkedList = (linkedList) => {
+  let middle = Math.floor(linkedList.size / 2)
+  let left = new LinkedList()
+  let right = new LinkedList()
+
+  let currentNode = linkedList.head;
+  let idx = 0
+  while (currentNode) {
+    if(idx < middle) {
+      left.insertAtLastPosition(currentNode.data)
+    } else {
+      right.insertAtLastPosition(currentNode.data)
+    }
+    currentNode = currentNode.next;
+    idx++
+  }
+  return [left, right]
+}
+
+function mergeLinkedList(left, right, linkedList) {
+  // Helper function
+  let leftIndex = 0;
+  let rightIndex = 0;
+  let outputIndex = 0;
+
+  // RE-FACTOR THIS TO WORK WITH LINKED LISTS
+ 
+  // let currentNode = linkedList.head;
+  // let idx = 0
+  // while (currentNode) {
+  //   if(idx < middle) {
+  //     left.insertAtLastPosition(currentNode.data)
+  //   } else {
+  //     right.insertAtLastPosition(currentNode.data)
+  //   }
+  //   currentNode = currentNode.next;
+  //   idx++
+  // }
+
+  let currentLeft = left.head
+  let currentRight = right.head
+  while (currentLeft && currentRight) {
+    if (currentLeft.value < currentRight.value) {
+      linkedList.insertAtLastPosition(currentLeft.value)
+    }
+    else {
+      linkedList.insertAtLastPosition(currentRight.value)
+    }
+    currentLeft = currentLeft.next
+    currentRight = currentRight.next
+  }
+
+  // RE-FACTOR THIS TO WORK WITH LINKED LISTS
+  for (let i = leftIndex; i < left.length; i++) {
+    array[outputIndex++] = left[i];
+  }
+
+  // RE-FACTOR THIS TO WORK WITH LINKED LISTS
+  for (let i = rightIndex; i < right.length; i++) {
+    array[outputIndex++] = right[i];
+  }
+
+  return linkedList;
+};
+
+const mergeSortLinkedList = (linkedList) => {
+  if (linkedList.size <= 1) {
+    return linkedList
+  }
+  let [left, right] = splitLinkedList(linkedList)
+  console.log('\nSplitting Linked List')
+  linkedList.printListData()
+  console.log('----------------------------------------------------------------')
+  left.printListData()
+  right.printListData()
+  console.log('----------------------------------------------------------------\n')
+  
+  // THIS STUFF DOESN'T WORK YET...
+  //left = mergeSortLinkedList(left)
+  //right = mergeSortLinkedList(right)
+  //return mergeLinkedList(left, right, linkedList);
+}
+
+
 
 // To test sort algorithms, type 'node dsa-sorting.js X'
 // at the command line. Replace X with
@@ -152,22 +240,26 @@ const main = () => {
       steps = 0
       mergeSort(arr)
       break
-    case "3":
+    case '3':
       console.log(`\nSort ${count} numbers using Quick Sort:`)
       startTimer()
       steps = 0
       quickSort(arr)
+      break
+    case '4':
+      let myLinkedList = new LinkedList()
+      let allDatData = [89, 30, 25, 32, 72, 70, 51, 42, 25, 24, 53, 55, 78, 50, 13, 40, 48, 32, 26, 2]
+      allDatData.forEach(item => myLinkedList.insertAtLastPosition(item))
+      mergeSortLinkedList(myLinkedList)
       break
     default:
       console.log(`\nSort ${count} numbers using Bubble Sort:`)
       startTimer()
       bubbleSort(arr)
       break
-  } 
+  }
 }
 main()
 
 
 /******************************/
-
-
